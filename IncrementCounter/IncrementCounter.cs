@@ -15,7 +15,7 @@ namespace IncrementCounter
         //TODO modify struct to contain int (Counter)
         public struct Response
         {
-            public string Name { get; set; }
+            public string Count { get; set; }
         }
 
         //TODO modify reponse to read current count from request and return plus 1
@@ -28,12 +28,14 @@ namespace IncrementCounter
 
             var response = new Response();
 
-            response.Name = req.Query["name"];
-            if (response.Name is null) response.Name = "something";
+            response.Count = req.Query["count"];
+            if (response.Count is null) return new BadRequestResult();
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
-            response.Name = response.Name ?? data?.name;
+            response.Count = response.Count ?? data?.count;
+
+            response.Count = (Convert.ToInt32(response.Count) + 1).ToString();
             /*
             string responseMessage = string.IsNullOrEmpty(response.Name)
                 ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
