@@ -9,27 +9,27 @@
 <button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
 @code {
-    //TODO clean up naming
-    private int currentCount = 0;
+    //TODO add a button to reset the counter and call another Azure function
+    public int currentCount = 0;
 
-    public struct returnObject
+    public struct CounterObject
     {
         public string Count { get; set; }
     }
 
-    private async Task IncrementCount()
+    public async Task IncrementCount()
     {
     //var requestMessage = new HttpRequestMessage(HttpMethod.Get,$"http://localhost:7071/api/IncrementCounter?count={currentCount}");
     var requestMessage = new HttpRequestMessage(HttpMethod.Get,$"https://incrementcountertesttees.azurewebsites.net/api/IncrementCounter?count={currentCount}");
     
-    //TODO turn this into a singleton service
     HttpClient httpClient = new HttpClient();
+
     using (HttpResponseMessage response = httpClient.Send(requestMessage))
             {
                 var responseStatusCode = response.StatusCode;
                 var responseBody = await response.Content.ReadAsStringAsync();
 
-                var returnCount = JsonConvert.DeserializeObject<returnObject>(responseBody);
+                var returnCount = JsonConvert.DeserializeObject<CounterObject>(responseBody);
 
                 currentCount = Convert.ToInt32(returnCount.Count);
 

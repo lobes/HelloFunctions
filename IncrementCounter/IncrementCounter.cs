@@ -12,13 +12,12 @@ namespace IncrementCounter
 {
     public static class IncrementCounter
     {
-        //TODO modify struct to contain int (Counter)
-        public struct Response
+        public struct CounterObject
         {
             public string Count { get; set; }
         }
 
-        //TODO modify reponse to read current count from request and return plus 1
+        //TODO add a "reset counter" function
         [FunctionName("IncrementCounter")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
@@ -26,22 +25,22 @@ namespace IncrementCounter
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            var response = new Response();
+            var counter = new CounterObject();
 
-            response.Count = req.Query["count"];
-            if (response.Count is null) return new BadRequestResult();
+            counter.Count = req.Query["count"];
+            if (counter.Count is null) return new BadRequestResult();
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
-            response.Count = response.Count ?? data?.count;
+            counter.Count = counter.Count ?? data?.count;
 
-            response.Count = (Convert.ToInt32(response.Count) + 1).ToString();
+            counter.Count = (Convert.ToInt32(counter.Count) + 1).ToString();
             /*
             string responseMessage = string.IsNullOrEmpty(response.Name)
                 ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
                 : $"Hello, {name}. This HTTP triggered function executed successfully.";
             */
-            return new OkObjectResult(response);
+            return new OkObjectResult(counter);
         }
     }
 }
