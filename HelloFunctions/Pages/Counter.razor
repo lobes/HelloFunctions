@@ -1,4 +1,5 @@
 ﻿@page "/counter"
+@inject HttpClient httpClient
 
 <PageTitle>Counter</PageTitle>
 
@@ -12,6 +13,12 @@
     //TODO add a button to reset the counter and call another Azure function
     public int currentCount = 0;
 
+    //HttpClient _httpClient;
+
+    //public Counter(HttpClient httpClient) {
+    //    _httpClient = httpClient;
+    //}
+
     public struct CounterObject
     {
         public string Count { get; set; }
@@ -19,10 +26,10 @@
 
     public async Task IncrementCount()
     {
-    //var requestMessage = new HttpRequestMessage(HttpMethod.Get,$"http://localhost:7071/api/IncrementCounter?count={currentCount}");
-    var requestMessage = new HttpRequestMessage(HttpMethod.Get,$"https://incrementcountertesttees.azurewebsites.net/api/IncrementCounter?count={currentCount}");
+    var requestMessage = new HttpRequestMessage(HttpMethod.Get,$"http://localhost:7071/api/IncrementCounter?count={currentCount}");
+    //var requestMessage = new HttpRequestMessage(HttpMethod.Get,$"https://incrementcountertesttees.azurewebsites.net/api/IncrementCounter?count={currentCount}");
     
-    HttpClient httpClient = new HttpClient();
+    //HttpClient httpClient = new HttpClient();
 
     using (HttpResponseMessage response = httpClient.Send(requestMessage))
             {
