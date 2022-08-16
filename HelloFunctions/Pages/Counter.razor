@@ -1,5 +1,5 @@
 ﻿@page "/counter"
-@inject HttpClient httpClient
+@*inject HttpClient httpClient*@
 
 <PageTitle>Counter</PageTitle>
 
@@ -13,11 +13,16 @@
     //TODO add a button to reset the counter and call another Azure function
     public int currentCount = 0;
 
-    //HttpClient _httpClient;
+    HttpClient httpClient;
 
     //public Counter(HttpClient httpClient) {
     //    _httpClient = httpClient;
     //}
+
+    protected override void OnInitialized()
+    {
+        httpClient = new();
+    }
 
     public struct CounterObject
     {
